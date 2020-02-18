@@ -61,6 +61,8 @@ final class HomeViewController: UIViewController {
         // #1 水平スクロールコレクションビュー
         verticalCollectionView.register(HorizontalCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: HorizontalCollectionViewCell.self))
 
+        verticalCollectionView.register(UICollectionReusableView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: UICollectionView.elementKindSectionHeader)
+
         return verticalCollectionView
     }()
 
@@ -83,10 +85,25 @@ final class HomeViewController: UIViewController {
 
 /// MARK: - コレクションビューのセル毎のデータ設定
 extension HomeViewController: UICollectionViewDataSource {
+    public func numberOfSections(in collectionView: UICollectionView) -> Int {
+        NSLog("\(String(describing: Self.self))::\(#function)@line:\(#line)")
+        return cellTypes.count
+    }
+
+    public func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        return mainCollectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: UICollectionView.elementKindSectionHeader, for: indexPath)
+//        guard let header = mainCollectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: UICollectionView.elementKindSectionHeader, for: indexPath) else {
+//            // fatal
+//            return UICollectionReusableView()
+//        }
+//        // todo:
+//        return header
+    }
+
     /// セル個数
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         NSLog("\(String(describing: Self.self))::\(#function)@line:\(#line) section: \(section)")
-        return cellTypes.count
+        return cellTypes.count % 2
     }
 
     /// セルのデータ設定
